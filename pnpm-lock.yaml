@@ -21,8 +21,8 @@ importers:
         specifier: ^1.7.3
         version: 1.7.3
       '@rsbuild/plugin-react':
-        specifier: ^1.4.5
-        version: 1.4.5(@rsbuild/core@1.7.3)
+        specifier: ^1.4.6
+        version: 1.4.6(@rsbuild/core@1.7.3)
       '@rslib/core':
         specifier: ^0.20.0
         version: 0.20.0(@microsoft/api-extractor@7.57.7(@types/node@24.12.0))(core-js@3.47.0)(typescript@5.9.3)
@@ -246,10 +246,13 @@ packages:
       core-js:
         optional: true
 
-  '@rsbuild/plugin-react@1.4.5':
-    resolution: {integrity: sha512-eS2sXCedgGA/7bLu8yVtn48eE/GyPbXx4Q7OcutB01IQ1D2y8WSMBys4nwfrecy19utvw4NPn4gYDy52316+vg==}
+  '@rsbuild/plugin-react@1.4.6':
+    resolution: {integrity: sha512-LAT6xHlEyZKA0VjF/ph5d50iyG+WSmBx+7g98HNZUwb94VeeTMZFB8qVptTkbIRMss3BNKOXmHOu71Lhsh9oEw==}
     peerDependencies:
       '@rsbuild/core': ^1.0.0 || ^2.0.0-0
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
 
   '@rslib/core@0.20.0':
     resolution: {integrity: sha512-hsRwjMbBla8lyKIVR0gFsK5M3j+LSbFOTafvbT0QR90ehZXwlu+EhpHJv8v/uIRT50RVlgCrcT+LCVr1oU3pbA==}
@@ -400,8 +403,8 @@ packages:
   '@rspack/lite-tapable@1.1.0':
     resolution: {integrity: sha512-E2B0JhYFmVAwdDiG14+DW0Di4Ze4Jg10Pc4/lILUrd5DRCaklduz2OvJ5HYQ6G+hd+WTzqQb3QnDNfK4yvAFYw==}
 
-  '@rspack/plugin-react-refresh@1.6.0':
-    resolution: {integrity: sha512-OO53gkrte/Ty4iRXxxM6lkwPGxsSsupFKdrPFnjwFIYrPvFLjeolAl5cTx+FzO5hYygJiGnw7iEKTmD+ptxqDA==}
+  '@rspack/plugin-react-refresh@1.6.1':
+    resolution: {integrity: sha512-eqqW5645VG3CzGzFgNg5HqNdHVXY+567PGjtDhhrM8t67caxmsSzRmT5qfoEIfBcGgFkH9vEg7kzXwmCYQdQDw==}
     peerDependencies:
       react-refresh: '>=0.10.0 <1.0.0'
       webpack-hot-middleware: 2.x
@@ -953,11 +956,12 @@ snapshots:
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
 
-  '@rsbuild/plugin-react@1.4.5(@rsbuild/core@1.7.3)':
+  '@rsbuild/plugin-react@1.4.6(@rsbuild/core@1.7.3)':
     dependencies:
-      '@rsbuild/core': 1.7.3
-      '@rspack/plugin-react-refresh': 1.6.0(react-refresh@0.18.0)
+      '@rspack/plugin-react-refresh': 1.6.1(react-refresh@0.18.0)
       react-refresh: 0.18.0
+    optionalDependencies:
+      '@rsbuild/core': 1.7.3
     transitivePeerDependencies:
       - webpack-hot-middleware
 
@@ -1079,7 +1083,7 @@ snapshots:
 
   '@rspack/lite-tapable@1.1.0': {}
 
-  '@rspack/plugin-react-refresh@1.6.0(react-refresh@0.18.0)':
+  '@rspack/plugin-react-refresh@1.6.1(react-refresh@0.18.0)':
     dependencies:
       error-stack-parser: 2.1.4
       html-entities: 2.6.0
