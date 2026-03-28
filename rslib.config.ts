@@ -63,7 +63,6 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
 export default defineConfig({
   lib: [
     {
-      format: 'esm',
       syntax: 'es2021',
       dts: {
         bundle: true,
