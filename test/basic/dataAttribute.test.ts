@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createRsbuild } from '@rsbuild/core';
 import { ASSETS_RETRY_DATA_ATTRIBUTE, pluginAssetsRetry } from '../../dist';
+import { getRandomPort } from './helper';
 
 test('should add data attribute to inline retry script', async ({ page }) => {
   const rsbuild = await createRsbuild({
@@ -11,6 +12,9 @@ test('should add data attribute to inline retry script', async ({ page }) => {
           inlineScript: true,
         }),
       ],
+      server: {
+        port: getRandomPort(),
+      },
     },
   });
 
@@ -40,6 +44,9 @@ test('should add data attribute to external retry script', async ({ page }) => {
           inlineScript: false,
         }),
       ],
+      server: {
+        port: getRandomPort(),
+      },
     },
   });
 
@@ -71,6 +78,9 @@ test('should be able to filter retry script in HTML template', async ({
           inlineScript: true,
         }),
       ],
+      server: {
+        port: getRandomPort(),
+      },
     },
   });
 

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createRsbuild } from '@rsbuild/core';
 import { pluginAssetsRetry } from '../../dist';
+import { getRandomPort } from '../basic/helper';
 
 const createDevServer = async () => {
   const rsbuild = await createRsbuild({
@@ -9,6 +10,9 @@ const createDevServer = async () => {
       plugins: [pluginAssetsRetry()],
       html: {
         template: './index.html',
+      },
+      server: {
+        port: getRandomPort(),
       },
     },
   });
