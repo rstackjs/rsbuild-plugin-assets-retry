@@ -4,10 +4,9 @@ export default defineConfig([
   {
     ignores: ['src/runtime/runtime.d.ts'],
   },
+  ts.configs.recommended,
   {
-    ...ts.configs.recommended,
     rules: {
-      ...ts.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
