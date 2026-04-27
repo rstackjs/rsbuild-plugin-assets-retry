@@ -185,7 +185,6 @@ const originalLoadScript = __RUNTIME_GLOBALS_LOAD_SCRIPT__;
 
 // if users want to support es5, add Promise polyfill first https://github.com/webpack/webpack/issues/12877
 function ensureChunk(chunkId: string): Promise<unknown> {
-  // biome-ignore lint/style/noArguments: allowed
   const args = Array.prototype.slice.call(arguments);
 
   // Other webpack runtimes would add arguments for `__webpack_require__.e`,
@@ -321,7 +320,6 @@ function ensureChunk(chunkId: string): Promise<unknown> {
 }
 
 function loadScript(): string {
-  // biome-ignore lint/style/noArguments: allowed
   const args = Array.prototype.slice.call(arguments) as Parameters<LoadScript>;
   const retry = globalCurrRetrying[args[3]];
   if (retry) {
@@ -333,7 +331,6 @@ function loadScript(): string {
 function loadStyleSheet(href: string, chunkId: ChunkId): string {
   const retry = globalCurrRetryingCss[chunkId];
   return (
-    // biome-ignore lint/complexity/useOptionalChain: for less code
     (retry && retry.nextRetryUrl) || __RUNTIME_GLOBALS_PUBLIC_PATH__ + href
   );
 }

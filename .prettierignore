@@ -1,0 +1,4 @@
+# Ignore artifacts:
+.rslib
+dist
+pnpm-lock.yaml
