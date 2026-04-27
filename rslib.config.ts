@@ -20,7 +20,7 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
     async function minifyRuntimeFile(distCode: string) {
       const startTime = performance.now();
       const { code: minifiedRuntimeCode } = await minify(distCode, {
-        ecma: 5,
+        ecma: 6,
         // allows SWC to mangle function names
         module: true,
         compress: {
@@ -75,7 +75,7 @@ export default defineConfig({
     },
     {
       format: 'iife',
-      syntax: 'es5',
+      syntax: 'es6',
       source: {
         entry: {
           'runtime/initialChunkRetry': 'src/runtime/initialChunkRetry.ts',
@@ -88,7 +88,7 @@ export default defineConfig({
     },
     {
       format: 'iife',
-      syntax: 'es5',
+      syntax: 'es6',
       source: {
         entry: {
           'runtime/asyncChunkRetry': 'src/runtime/asyncChunkRetry.ts',
