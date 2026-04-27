@@ -104,7 +104,7 @@ class AsyncChunkRetryPlugin implements Rspack.RspackPluginInstance {
       const isRspack = this.isRspack;
       compilation.hooks.runtimeModule.tap(this.name, (module) => {
         const constructorName =
-          // @ts-expect-error
+          // @ts-expect-error Rspack exposes constructorName on rendered runtime modules.
           module.constructorName || module.constructor?.name;
 
         const isCssLoadingRuntimeModule =

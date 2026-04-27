@@ -28,7 +28,11 @@ function getRuntimeOptions(
   userOptions: PluginAssetsRetryOptions,
   defaultCrossOrigin: boolean | 'anonymous' | 'use-credentials',
 ): NormalizedRuntimeRetryOptions[] {
-  const { inlineScript, minify, ...runtimeOptions } = userOptions;
+  const {
+    inlineScript: _inlineScript,
+    minify: _minify,
+    ...runtimeOptions
+  } = userOptions;
   const defaultOptions: NormalizedRuntimeRetryOptions = {
     max: 3,
     type: ['link', 'script', 'img'],
