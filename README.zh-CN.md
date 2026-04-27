@@ -472,9 +472,9 @@ Assets Retry 插件通过监听页面 error 事件来获悉当前资源是否加
 
 #### 在 HTML 模板中识别重试脚本
 
-Assets Retry 插件为重试脚本添加了唯一的 `data-rsbuild-assets-retry` 属性，使您可以在自定义 HTML 模板中轻松识别它们。
+Assets Retry 插件为重试脚本添加了唯一的 `data-rsbuild-assets-retry` 属性，使你可以在自定义 HTML 模板中轻松识别它们。
 
-您可以导入属性常量：
+你可以导入属性常量：
 
 ```js
 import { ASSETS_RETRY_DATA_ATTRIBUTE } from '@rsbuild/plugin-assets-retry';
@@ -497,7 +497,7 @@ tag.attributes['data-rsbuild-assets-retry'] === 'inline') %>
 !tag.attributes['data-rsbuild-assets-retry']) %>
 ```
 
-这允许您将重试脚本放置在 HTML 头部的顶部以获得最佳的加载顺序。
+这允许你将重试脚本放置在 HTML 头部的顶部以获得最佳的加载顺序。
 
 ## License
 

@@ -63,19 +63,10 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
 export default defineConfig({
   lib: [
     {
-      syntax: 'es2021',
+      syntax: 'es2023',
       dts: {
         bundle: true,
       },
-      source: {
-        entry: {
-          index: 'src/index.ts',
-        },
-      },
-    },
-    {
-      format: 'cjs',
-      syntax: 'es2021',
       source: {
         entry: {
           index: 'src/index.ts',
