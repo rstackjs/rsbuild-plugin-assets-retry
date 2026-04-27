@@ -20,7 +20,7 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
     async function minifyRuntimeFile(distCode: string) {
       const startTime = performance.now();
       const { code: minifiedRuntimeCode } = await minify(distCode, {
-        ecma: 5,
+        ecma: 6,
         // allows SWC to mangle function names
         module: true,
         compress: {
