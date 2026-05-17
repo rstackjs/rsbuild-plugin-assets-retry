@@ -1,2 +1,7 @@
 packages:
   - 'playground'
+
+allowBuilds:
+  '@swc/core': false
+  core-js: false
+  simple-git-hooks: false
