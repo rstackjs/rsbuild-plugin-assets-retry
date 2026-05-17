@@ -194,10 +194,7 @@ function ensureChunk(chunkId: string): Promise<unknown> {
   }
   const callingCounter: { count: number; cssFailedCount: number } = args[10];
 
-  const result = originalEnsureChunk.apply(
-    null,
-    args as Parameters<EnsureChunk>,
-  );
+  const result = originalEnsureChunk(...(args as Parameters<EnsureChunk>));
 
   try {
     const originalScriptFilename = originalGetChunkScriptFilename(chunkId);
@@ -325,7 +322,7 @@ function loadScript(): string {
   if (retry) {
     args[0] = retry.nextRetryUrl;
   }
-  return originalLoadScript.apply(null, args);
+  return originalLoadScript(...args);
 }
 
 function loadStyleSheet(href: string, chunkId: ChunkId): string {
