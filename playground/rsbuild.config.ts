@@ -28,10 +28,10 @@ export function createBlockMiddleware({ urlPrefix, blockNum, onBlock }) {
 }
 
 export default defineConfig({
-  dev: {
-    setupMiddlewares: [
-      (middlewares) => {
-        middlewares.unshift(
+  server: {
+    setup: ({ action, server }) => {
+      if (action === 'dev') {
+        server.middlewares.use(
           createBlockMiddleware({
             urlPrefix: '/static/js/async/src_AsyncCompTest_tsx.js',
             blockNum: 3,
@@ -40,8 +40,8 @@ export default defineConfig({
             },
           }),
         );
-      },
-    ],
+      }
+    },
   },
   plugins: [
     pluginAssetsRetry({

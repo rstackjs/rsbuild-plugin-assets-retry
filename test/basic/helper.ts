@@ -133,31 +133,27 @@ export async function createRsbuildWithMiddleware(
         liveReload: false,
         // TODO: make e2e work with lazy compilation
         lazyCompilation: false,
-        setupMiddlewares: [
-          (middlewares, _server) => {
-            const addMiddleWares = Array.isArray(middleware)
-              ? middleware
-              : [middleware];
-            middlewares.unshift(...addMiddleWares);
-          },
-        ],
         ...(assetPrefix
           ? {
               assetPrefix,
             }
           : {}),
       },
-      ...(port
-        ? {
-            server: {
-              port,
-            },
+      server: {
+        port: port || getRandomPort(),
+        setup: ({ action, server }) => {
+          if (action !== 'dev') {
+            return;
           }
-        : {
-            server: {
-              port: getRandomPort(),
-            },
-          }),
+
+          const addMiddleWares = Array.isArray(middleware)
+            ? middleware
+            : [middleware];
+          for (const item of addMiddleWares) {
+            server.middlewares.use(item);
+          }
+        },
+      },
       ...(entry
         ? {
             source: { entry: { index: entry } },
