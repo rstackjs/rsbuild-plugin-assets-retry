@@ -56,6 +56,9 @@ importers:
       react-dom:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
+      rsbuild-plugin-publint:
+        specifier: ^1.0.0
+        version: 1.0.0(@rsbuild/core@2.0.15)
       serialize-javascript:
         specifier: ^7.0.5
         version: 7.0.5
@@ -164,6 +167,10 @@ packages:
     resolution: {integrity: sha512-cKA5B6lpFEMyMGjxF54QihfYpB4FkEGH+qZhtArDEG+wezQAJY8Pq6C7T1SjWz+FFzt3TbyoXBQYk/0292TdJA==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@publint/pack@0.1.4':
+    resolution: {integrity: sha512-HDVTWq3H0uTXiU0eeSQntcVUTPP3GamzeXI41+x7uU9J65JgWQh3qWZHblR1i0npXfFtF+mxBiU2nJH8znxWnQ==}
+    engines: {node: '>=18'}
 
   '@rsbuild/core@2.0.15':
     resolution: {integrity: sha512-O8vmMhZu1YImO6jOqt/K/vlJSvkq7UtSq5YM1DIlcEd9LW8Gf6/dkQ1B2KPI6F+hSMFBnTTTumdcIowSLCw97g==}
@@ -606,8 +613,18 @@ packages:
     resolution: {integrity: sha512-Rwi3pnapEqirPSbWbrZaa6N3nmqq4Xer/2XooiOKyV3q12ML06f7MOuc5DVH8ONZIFhwIYQ3yzPH4nt7iWHaTg==}
     engines: {node: 18 || 20 || >=22}
 
+  mri@1.2.0:
+    resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
+    engines: {node: '>=4'}
+
+  package-manager-detector@1.6.0:
+    resolution: {integrity: sha512-61A5ThoTiDG/C8s8UMZwSorAGwMJ0ERVGj2OjoW5pAalsNOg15+iQiPzrLJ4jhZ1HJzmC2PIHT2oEiH3R5fzNA==}
+
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
+
+  picocolors@1.1.1:
+    resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
   picomatch@4.0.4:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
@@ -626,6 +643,11 @@ packages:
   prettier@3.8.4:
     resolution: {integrity: sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==}
     engines: {node: '>=14'}
+    hasBin: true
+
+  publint@0.3.21:
+    resolution: {integrity: sha512-OqejcnMV6E9zel2oCrUOJEiiFkGiAAni0A6ibfQNh1k9Gu5z4F+Yso8lllam7AzmV6Do0vp7u3UpZNRBwuXaHQ==}
+    engines: {node: '>=18'}
     hasBin: true
 
   react-dom@19.2.7:
@@ -665,6 +687,19 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  rsbuild-plugin-publint@1.0.0:
+    resolution: {integrity: sha512-QNu6zL0TOmFZfrCiKSmkw092jDhhPpiA1QYDRkvhkW1wDLowuVEYOqdV87Eo/I6geV0nuKKnCgLHT+Fevbz6pA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rsbuild/core': ^1.0.0 || ^2.0.0-0
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
+
+  sade@1.8.1:
+    resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
+    engines: {node: '>=6'}
 
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
@@ -823,6 +858,8 @@ snapshots:
   '@playwright/test@1.61.0':
     dependencies:
       playwright: 1.61.0
+
+  '@publint/pack@0.1.4': {}
 
   '@rsbuild/core@2.0.15':
     dependencies:
@@ -1176,7 +1213,13 @@ snapshots:
     dependencies:
       brace-expansion: 5.0.4
 
+  mri@1.2.0: {}
+
+  package-manager-detector@1.6.0: {}
+
   path-parse@1.0.7: {}
+
+  picocolors@1.1.1: {}
 
   picomatch@4.0.4: {}
 
@@ -1189,6 +1232,13 @@ snapshots:
       fsevents: 2.3.2
 
   prettier@3.8.4: {}
+
+  publint@0.3.21:
+    dependencies:
+      '@publint/pack': 0.1.4
+      package-manager-detector: 1.6.0
+      picocolors: 1.1.1
+      sade: 1.8.1
 
   react-dom@19.2.7(react@19.2.7):
     dependencies:
@@ -1215,6 +1265,16 @@ snapshots:
       '@microsoft/api-extractor': 7.58.9(@types/node@24.13.2)
       '@typescript/native-preview': 7.0.0-dev.20260527.2
       typescript: 6.0.3
+
+  rsbuild-plugin-publint@1.0.0(@rsbuild/core@2.0.15):
+    dependencies:
+      publint: 0.3.21
+    optionalDependencies:
+      '@rsbuild/core': 2.0.15
+
+  sade@1.8.1:
+    dependencies:
+      mri: 1.2.0
 
   scheduler@0.27.0: {}
 
