@@ -1,9 +1,10 @@
-import { defineConfig, ts } from '@rslint/core';
+import { defineConfig, js, ts } from '@rslint/core';
 
 export default defineConfig([
   {
     ignores: ['src/runtime/runtime.d.ts'],
   },
+  js.configs.recommended,
   ts.configs.recommended,
   {
     rules: {
