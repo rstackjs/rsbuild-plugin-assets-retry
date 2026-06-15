@@ -15,8 +15,10 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
+        node-version: [20.19.0, 24.16.0]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -26,7 +28,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
-          node-version: 24.16.0
+          node-version: ${{ matrix.node-version }}
           package-manager-cache: false
 
       - name: Install Pnpm
