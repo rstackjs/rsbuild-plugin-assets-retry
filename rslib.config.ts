@@ -3,6 +3,7 @@ import { performance } from 'node:perf_hooks';
 import { type RsbuildPlugin, logger } from '@rsbuild/core';
 import { defineConfig } from '@rslib/core';
 import { minify } from '@swc/core';
+import { pluginPublint } from 'rsbuild-plugin-publint';
 import pkgJson from './package.json';
 
 /**
@@ -61,11 +62,13 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
 });
 
 export default defineConfig({
+  plugins: [pluginPublint()],
   lib: [
     {
       syntax: 'es2023',
       dts: {
         bundle: true,
+        tsgo: true,
       },
       source: {
         entry: {
