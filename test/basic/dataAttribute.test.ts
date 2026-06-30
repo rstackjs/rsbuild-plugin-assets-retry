@@ -1,7 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 import { createRsbuild } from '@rsbuild/core';
 import { ASSETS_RETRY_DATA_ATTRIBUTE, pluginAssetsRetry } from '../../dist';
 import { getRandomPort } from './helper';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const runtimeDir = path.resolve(__dirname, '../../dist/runtime');
+const es6PlusSyntaxRE = /\b(?:const|let|class)\b|=>|\?\?|\?\.|\.\.\.|`/;
+const runtimeFiles = [
+  'initialChunkRetry.js',
+  'initialChunkRetry.min.js',
+  'asyncChunkRetry.js',
+  'asyncChunkRetry.min.js',
+];
+
+test('should emit retry runtime without ES6+ syntax', () => {
+  for (const filename of runtimeFiles) {
+    const code = fs.readFileSync(path.join(runtimeDir, filename), 'utf-8');
+    expect(code).not.toMatch(es6PlusSyntaxRE);
+  }
+});
 
 test('should add data attribute to inline retry script', async ({ page }) => {
   const rsbuild = await createRsbuild({
