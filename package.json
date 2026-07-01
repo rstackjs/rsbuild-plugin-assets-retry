@@ -36,23 +36,23 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.9",
-    "@playwright/test": "^1.61.0",
-    "@rsbuild/core": "^2.0.15",
-    "@rsbuild/plugin-react": "^2.0.1",
-    "@rslib/core": "^0.23.0",
-    "@rslint/core": "^0.6.2",
-    "@swc/core": "^1.15.41",
+    "@playwright/test": "^1.61.1",
+    "@rsbuild/core": "^2.1.2",
+    "@rsbuild/plugin-react": "^2.1.0",
+    "@rslib/core": "^0.23.1",
+    "@rslint/core": "^0.6.4",
+    "@swc/core": "^1.15.43",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/serialize-javascript": "^5.0.4",
-    "@typescript/native-preview": "7.0.0-dev.20260527.2",
-    "playwright": "^1.61.0",
-    "prettier": "^3.8.4",
+    "@typescript/native-preview": "7.0.0-dev.20260630.1",
+    "playwright": "^1.61.1",
+    "prettier": "^3.9.4",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rsbuild-plugin-publint": "^1.0.0",
-    "serialize-javascript": "^7.0.5",
+    "serialize-javascript": "^7.0.7",
     "simple-git-hooks": "^2.13.1",
     "typescript": "6.0.3"
   },
@@ -64,7 +64,7 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@11.7.0",
+  "packageManager": "pnpm@11.9.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
