@@ -5,3 +5,7 @@ allowBuilds:
   '@swc/core': false
   core-js: false
   simple-git-hooks: false
+
+minimumReleaseAgeExclude:
+  - typescript
+  - '@typescript/*'
