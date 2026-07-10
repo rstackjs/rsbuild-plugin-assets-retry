@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@rstest/playwright';
 import { type RsbuildPlugin, createRsbuild } from '@rsbuild/core';
 import rsbuildConfig from './rsbuild.config';
 

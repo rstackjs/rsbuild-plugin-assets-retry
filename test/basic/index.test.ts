@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@rstest/playwright';
 import { logger } from '@rsbuild/core';
 import { getRandomPort, gotoPage, proxyConsole } from './helper';
 import {
