@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@rstest/playwright';
 import { logger } from '@rsbuild/core';
 import { gotoPage, proxyConsole } from './helper';
 import { createBlockMiddleware, createRsbuildWithMiddleware } from './helper';
@@ -43,4 +43,4 @@ test('should apply function delay for async chunk retries', async ({
   await rsbuild.server.close();
   restore();
   logger.level = 'log';
-});
+}, 10_000);
