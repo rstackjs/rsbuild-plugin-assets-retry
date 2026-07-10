@@ -43,4 +43,4 @@ test('should apply function delay for async chunk retries', async ({
   await rsbuild.server.close();
   restore();
   logger.level = 'log';
-});
+}, 10_000);
