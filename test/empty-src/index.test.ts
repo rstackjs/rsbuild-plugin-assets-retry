@@ -12,7 +12,7 @@ const createDevServer = async () => {
         template: './index.html',
       },
       server: {
-        port: getRandomPort(),
+        port: await getRandomPort(),
       },
     },
   });

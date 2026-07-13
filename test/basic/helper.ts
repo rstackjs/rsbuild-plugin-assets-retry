@@ -1,23 +1,11 @@
 import { stripVTControlCharacters as stripAnsi } from 'node:util';
 import { type RequestHandler, createRsbuild } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
+import { getRandomPort, proxyConsole } from '@rstackjs/test-utils';
 import type { Page } from 'playwright';
 import { type PluginAssetsRetryOptions, pluginAssetsRetry } from '../../dist';
 
-const portMap = new Map();
-
-export function getRandomPort(
-  defaultPort = Math.ceil(Math.random() * 30000) + 15000,
-) {
-  let port = defaultPort;
-  while (true) {
-    if (!portMap.get(port)) {
-      portMap.set(port, 1);
-      return port;
-    }
-    port++;
-  }
-}
+export { getRandomPort, proxyConsole };
 
 export const getHrefByEntryName = (entryName: string, port: number) => {
   const htmlRoot = new URL(`http://localhost:${port}`);
@@ -140,7 +128,7 @@ export async function createRsbuildWithMiddleware(
           : {}),
       },
       server: {
-        port: port || getRandomPort(),
+        port: port || (await getRandomPort()),
         setup: ({ action, server }) => {
           if (action !== 'dev') {
             return;
@@ -216,32 +204,3 @@ export async function proxyPageConsole(page: Page, port: number) {
     onFailContextList,
   };
 }
-
-export const proxyConsole = (
-  types: string | string[] = ['log', 'warn', 'info', 'error'],
-  keepAnsi = false,
-) => {
-  const logs: string[] = [];
-  const restores: Array<() => void> = [];
-
-  for (const type of Array.isArray(types) ? types : [types]) {
-    const method = console[type];
-
-    restores.push(() => {
-      console[type] = method;
-    });
-
-    console[type] = (log) => {
-      logs.push(keepAnsi ? log : stripAnsi(log));
-    };
-  }
-
-  return {
-    logs,
-    restore: () => {
-      for (const restore of restores) {
-        restore();
-      }
-    },
-  };
-};
