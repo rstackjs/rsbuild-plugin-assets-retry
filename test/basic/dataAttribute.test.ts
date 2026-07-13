@@ -13,7 +13,7 @@ test('should add data attribute to inline retry script', async ({ page }) => {
         }),
       ],
       server: {
-        port: getRandomPort(),
+        port: await getRandomPort(),
       },
     },
   });
@@ -45,7 +45,7 @@ test('should add data attribute to external retry script', async ({ page }) => {
         }),
       ],
       server: {
-        port: getRandomPort(),
+        port: await getRandomPort(),
       },
     },
   });
@@ -79,7 +79,7 @@ test('should be able to filter retry script in HTML template', async ({
         }),
       ],
       server: {
-        port: getRandomPort(),
+        port: await getRandomPort(),
       },
     },
   });
