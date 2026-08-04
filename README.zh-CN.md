@@ -254,8 +254,7 @@ pluginAssetsRetry({
 
 ```ts
 type AddQuery =
-  | boolean
-  | ((context: { times: number; originalQuery: string }) => string);
+  boolean | ((context: { times: number; originalQuery: string }) => string);
 ```
 
 - **默认值：** `false`

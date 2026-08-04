@@ -60,8 +60,7 @@ export type RuntimeRetryOptionsWithDefaultValue = {
    * ```
    */
   addQuery?:
-    | boolean
-    | ((context: { times: number; originalQuery: string }) => string);
+    boolean | ((context: { times: number; originalQuery: string }) => string);
 };
 
 export type RuntimeRetryOptionsWithoutDefaultValue = {
