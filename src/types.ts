@@ -21,9 +21,21 @@ export type RuntimeRetryOptionsWithDefaultValue = {
   type?: string[];
   /**
    * Specifies the retry domain when assets fail to load.
+   *
+   * Besides a static array, a function returning `string[]` can be passed. The
+   * function is serialized into the runtime and evaluated in the browser when
+   * the retry script starts, so it can read values that only exist at runtime
+   * (e.g. `window.*`). The returned value is resolved once and cached.
+   *
+   * The function must be self-contained: it cannot close over build-time
+   * variables, only browser globals.
+   *
+   * ```ts
+   * domain: () => [window.assetsS3Path, 'https://cdn.example.com']
+   * ```
    * @default []
    */
-  domain?: string[];
+  domain?: string[] | (() => string[]);
   /**
    * Set the `crossorigin` attribute for tags.
    * @default rsbuildConfig.html.crossorigin
