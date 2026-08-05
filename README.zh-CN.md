@@ -103,6 +103,12 @@ const defaultAssetsRetryOptions = {
 
 指定资源加载失败时的重试域名列表。在 `domain` 数组中，第一项是静态资源默认所在的域名，后面几项为备用域名。当某个域名的资源请求失败时，Rsbuild 会在数组中找到该域名，并替换为数组的下一个域名。
 
+> [!NOTE]
+> `domain` 中的地址可以带协议，也可以不带协议：
+>
+> - `domain: ['cdn1.com', 'cdn2.com', 'cdn3.com']` 只匹配域名，无论请求使用 HTTP 还是 HTTPS。替换时只替换域名，因此会保留原请求的协议。
+> - `domain: ['https://cdn1.com']` 会同时匹配协议。替换时会替换完整的 URL 前缀，因此不同的数组项可以切换协议或包含路径前缀。数组只有一项时，会使用相同的 URL 前缀重试。当页面使用 HTTPS 时，不要配置 HTTP 兜底地址，否则浏览器会将其作为 mixed content 阻止。
+
 比如：
 
 ```js
@@ -135,8 +141,8 @@ defineConfig({
       // 在浏览器启动时执行，而非构建时。
       domain: () => [
         window.location.origin,
-        'http://a.com/foo-path',
-        'http://b.com',
+        'https://a.com/foo-path',
+        'https://b.com',
       ],
     }),
   ],
