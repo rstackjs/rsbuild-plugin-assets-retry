@@ -135,7 +135,11 @@ defineConfig({
   plugins: [
     pluginAssetsRetry({
       // Evaluated in the browser at startup, not at build time.
-      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+      domain: () => [
+        window.location.origin,
+        'http://a.com/foo-path',
+        'http://b.com',
+      ],
     }),
   ],
 });

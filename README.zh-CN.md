@@ -133,7 +133,11 @@ defineConfig({
   plugins: [
     pluginAssetsRetry({
       // 在浏览器启动时执行，而非构建时。
-      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+      domain: () => [
+        window.location.origin,
+        'http://a.com/foo-path',
+        'http://b.com',
+      ],
     }),
   ],
 });
