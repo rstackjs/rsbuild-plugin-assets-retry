@@ -61,7 +61,7 @@ type AssetsRetryHookContext = {
 
 type RuntimeRetryOptions = {
   type?: string[];
-  domain?: string[];
+  domain?: string[] | (() => string[]);
   max?: number;
   test?: string | RegExp | ((url: string) => boolean);
   crossOrigin?: boolean | 'anonymous' | 'use-credentials';
@@ -100,7 +100,7 @@ const defaultAssetsRetryOptions = {
 
 ### domain
 
-- **Type:** `string[]`
+- **Type:** `string[] | (() => string[])`
 - **Default:** `[]`
 
 Specifies the retry domain when assets fail to load. In the `domain` array, the first item is the default domain of static assets, and the following items are backup domains. When a asset request for a domain fails, Rsbuild will find that domain in the array and replace it with the next domain in the array.
@@ -124,6 +124,27 @@ defineConfig({
 After adding the above configuration, when assets fail to load from the `cdn1.com` domain, the request domain will automatically fallback to `cdn2.com`.
 
 If the assets request for `cdn2.com` also fails, the request will fallback to `cdn3.com`.
+
+#### Resolving the domain at runtime
+
+When the domain list is only known in the browser (for example it is injected on `window` at application startup), pass a function instead of a static array. Like the `onRetry` / `onFail` callbacks, the function is serialized into the runtime script and evaluated in the browser when the retry script starts, so it can read values that do not exist at build time:
+
+```js
+// rsbuild.config.ts
+defineConfig({
+  plugins: [
+    pluginAssetsRetry({
+      // Evaluated in the browser at startup, not at build time.
+      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+    }),
+  ],
+});
+```
+
+The returned value is resolved once when the retry script starts and cached for subsequent retries.
+
+> [!NOTE]
+> The function must be self-contained: it cannot close over build-time variables (they do not exist in the browser), only over browser globals such as `window`.
 
 ### type
 
@@ -235,8 +256,7 @@ pluginAssetsRetry({
 
 ```ts
 type AddQuery =
-  | boolean
-  | ((context: { times: number; originalQuery: string }) => string);
+  boolean | ((context: { times: number; originalQuery: string }) => string);
 ```
 
 - **Default:** `false`

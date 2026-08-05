@@ -59,7 +59,7 @@ type AssetsRetryHookContext = {
 
 type RuntimeRetryOptions = {
   type?: string[];
-  domain?: string[];
+  domain?: string[] | (() => string[]);
   max?: number;
   test?: string | ((url: string) => boolean);
   crossOrigin?: boolean | 'anonymous' | 'use-credentials';
@@ -98,7 +98,7 @@ const defaultAssetsRetryOptions = {
 
 ### domain
 
-- **类型：** `string[]`
+- **类型：** `string[] | (() => string[])`
 - **默认值：** `[]`
 
 指定资源加载失败时的重试域名列表。在 `domain` 数组中，第一项是静态资源默认所在的域名，后面几项为备用域名。当某个域名的资源请求失败时，Rsbuild 会在数组中找到该域名，并替换为数组的下一个域名。
@@ -122,6 +122,27 @@ defineConfig({
 添加以上配置后，当 `cdn1.com` 域名的资源加载失败时，请求域名会自动降级到 `cdn2.com`。
 
 如果 `cdn2.com` 的资源也请求失败，则会继续请求 `cdn3.com`。
+
+#### 在运行时解析域名
+
+当域名列表只有在浏览器中才能确定时（例如在应用启动时注入到 `window` 上），可以传入一个函数来代替静态数组。与 `onRetry` / `onFail` 回调一样，该函数会被序列化到运行时脚本中，并在重试脚本启动时于浏览器中执行，因此可以读取构建时并不存在的值：
+
+```js
+// rsbuild.config.ts
+defineConfig({
+  plugins: [
+    pluginAssetsRetry({
+      // 在浏览器启动时执行，而非构建时。
+      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+    }),
+  ],
+});
+```
+
+返回值会在重试脚本启动时解析一次，并在后续重试中复用（缓存）。
+
+> [!NOTE]
+> 该函数必须是自包含的：它不能引用构建时的变量（这些变量在浏览器中并不存在），只能引用 `window` 等浏览器全局对象。
 
 ### type
 
@@ -233,8 +254,7 @@ pluginAssetsRetry({
 
 ```ts
 type AddQuery =
-  | boolean
-  | ((context: { times: number; originalQuery: string }) => string);
+  boolean | ((context: { times: number; originalQuery: string }) => string);
 ```
 
 - **默认值：** `false`

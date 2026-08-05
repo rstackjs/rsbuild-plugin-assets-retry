@@ -1,4 +1,4 @@
-import { findCurrentDomain } from './urlCalculate.js';
+import { findCurrentDomain, getDomainList } from './urlCalculate.js';
 
 /**
  * match rule by
@@ -25,9 +25,10 @@ export function findMatchingRule(
       shouldMatch = tester(url);
     }
 
-    if (rule.domain && rule.domain.length > 0) {
+    const domains = getDomainList(rule);
+    if (domains.length > 0) {
       const domain = findCurrentDomain(url, rule);
-      if (!rule.domain.includes(domain)) {
+      if (!domains.includes(domain)) {
         shouldMatch = false;
       }
     }

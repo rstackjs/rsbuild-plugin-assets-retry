@@ -54,11 +54,14 @@ function getRuntimeOptions(
     if (!Array.isArray(result.type) || result.type.length === 0) {
       result.type = defaultOptions.type;
     }
-    if (!Array.isArray(result.domain) || result.domain.length === 0) {
-      result.domain = defaultOptions.domain;
-    }
-    if (Array.isArray(result.domain)) {
-      result.domain = result.domain.filter(Boolean);
+    // Keep a `domain` function as-is: it is serialized into the runtime and
+    // resolved in the browser. Only normalize the static array form here.
+    if (typeof result.domain !== 'function') {
+      if (!Array.isArray(result.domain) || result.domain.length === 0) {
+        result.domain = defaultOptions.domain;
+      } else {
+        result.domain = result.domain.filter(Boolean);
+      }
     }
     return result;
   }
