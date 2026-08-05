@@ -125,23 +125,28 @@ After adding the above configuration, when assets fail to load from the `cdn1.co
 
 If the assets request for `cdn2.com` also fails, the request will fallback to `cdn3.com`.
 
-> [!NOTE]
-> `domain` generates retry URLs using string replacement, so entries may also start with `https://`. When using this format, every item in the array must include the protocol.
->
-> ```ts
-> import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
->
-> export default {
->   plugins: [
->     pluginAssetsRetry({
->       domain: ['https://cdn1.com', 'https://cdn2.com', 'https://cdn3.com'],
->     }),
->   ],
->   output: {
->     assetPrefix: 'https://cdn1.com',
->   },
-> };
-> ```
+#### Using string replacement
+
+`domain` generates retry URLs using string replacement, so it supports full URLs starting with `https://` and CDN URLs with a path prefix, such as `https://cdn2.com/foo-path`. When using full URLs, every item in the array must include the protocol.
+
+```ts
+import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+
+export default {
+  plugins: [
+    pluginAssetsRetry({
+      domain: [
+        'https://cdn1.com',
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
+    }),
+  ],
+  output: {
+    assetPrefix: 'https://cdn1.com',
+  },
+};
+```
 
 #### Resolving the domain at runtime
 

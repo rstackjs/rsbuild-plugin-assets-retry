@@ -123,23 +123,28 @@ defineConfig({
 
 如果 `cdn2.com` 的资源也请求失败，则会继续请求 `cdn3.com`。
 
-> [!NOTE]
-> `domain` 使用字符串替换生成重试 URL，所以也支持带 `https://` 开头的用法。使用这种写法时，数组中的每一项都必须带协议。
->
-> ```ts
-> import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
->
-> export default {
->   plugins: [
->     pluginAssetsRetry({
->       domain: ['https://cdn1.com', 'https://cdn2.com', 'https://cdn3.com'],
->     }),
->   ],
->   output: {
->     assetPrefix: 'https://cdn1.com',
->   },
-> };
-> ```
+#### 利用字符串替换
+
+`domain` 使用字符串替换生成重试 URL，因此支持带 `https://` 开头的完整地址，也支持 CDN 地址包含子路径前缀，例如 `https://cdn2.com/foo-path`。使用完整地址时，数组中的每一项都必须带协议。
+
+```ts
+import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+
+export default {
+  plugins: [
+    pluginAssetsRetry({
+      domain: [
+        'https://cdn1.com',
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
+    }),
+  ],
+  output: {
+    assetPrefix: 'https://cdn1.com',
+  },
+};
+```
 
 #### 在运行时解析域名
 
