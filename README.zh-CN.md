@@ -103,14 +103,6 @@ const defaultAssetsRetryOptions = {
 
 指定资源加载失败时的重试域名列表。在 `domain` 数组中，第一项是静态资源默认所在的域名，后面几项为备用域名。当某个域名的资源请求失败时，Rsbuild 会在数组中找到该域名，并替换为数组的下一个域名。
 
-> [!NOTE]
-> 插件会对请求 URL 执行查找和替换：按照数组顺序查找 URL 中出现的第一个 `domain` 项，并将匹配的字符串替换为下一项。匹配到最后一项后，会循环回到第一项。如果没有匹配项，则不会替换域名。
->
-> `domain` 中的地址可以带协议，也可以不带协议：
->
-> - `domain: ['cdn1.com', 'cdn2.com', 'cdn3.com']` 只匹配域名，无论请求使用 HTTP 还是 HTTPS。替换时只替换域名，因此会保留原请求的协议。
-> - `domain: ['https://cdn1.com']` 会同时匹配协议。替换时会替换完整的 URL 前缀，因此不同的数组项可以切换协议或包含路径前缀。数组只有一项时，会使用相同的 URL 前缀重试。当页面使用 HTTPS 时，不要配置 HTTP 兜底地址，否则浏览器会将其作为 mixed content 阻止。
-
 比如：
 
 ```js
@@ -130,6 +122,24 @@ defineConfig({
 添加以上配置后，当 `cdn1.com` 域名的资源加载失败时，请求域名会自动降级到 `cdn2.com`。
 
 如果 `cdn2.com` 的资源也请求失败，则会继续请求 `cdn3.com`。
+
+> [!NOTE]
+> `domain` 使用字符串替换生成重试 URL，所以也支持带 `https://` 开头的用法。使用这种写法时，数组中的每一项都必须带协议。
+>
+> ```ts
+> import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+>
+> export default {
+>   plugins: [
+>     pluginAssetsRetry({
+>       domain: ['https://cdn1.com', 'https://cdn2.com', 'https://cdn3.com'],
+>     }),
+>   ],
+>   output: {
+>     assetPrefix: 'https://cdn1.com',
+>   },
+> };
+> ```
 
 #### 在运行时解析域名
 

@@ -105,14 +105,6 @@ const defaultAssetsRetryOptions = {
 
 Specifies the retry domain when assets fail to load. In the `domain` array, the first item is the default domain of static assets, and the following items are backup domains. When a asset request for a domain fails, Rsbuild will find that domain in the array and replace it with the next domain in the array.
 
-> [!NOTE]
-> The plugin uses a find-and-replace strategy on the request URL: it finds the first `domain` entry that appears in the URL and replaces the matched string with the next entry. After the last entry, it cycles back to the first one. If no entry matches, the domain is not replaced.
->
-> `domain` entries can omit or include the protocol:
->
-> - `domain: ['cdn1.com', 'cdn2.com', 'cdn3.com']` matches the hostname regardless of whether the request uses HTTP or HTTPS. Only the hostname is replaced, so the original protocol is preserved.
-> - `domain: ['https://cdn1.com']` also matches the protocol. The entire configured URL prefix is replaced, so different entries can switch protocols or include path prefixes. An array with only one entry retries with the same URL prefix. When the page uses HTTPS, do not configure HTTP fallback URLs because browsers block them as mixed content.
-
 For example:
 
 ```js
@@ -132,6 +124,24 @@ defineConfig({
 After adding the above configuration, when assets fail to load from the `cdn1.com` domain, the request domain will automatically fallback to `cdn2.com`.
 
 If the assets request for `cdn2.com` also fails, the request will fallback to `cdn3.com`.
+
+> [!NOTE]
+> `domain` generates retry URLs using string replacement, so entries may also start with `https://`. When using this format, every item in the array must include the protocol.
+>
+> ```ts
+> import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+>
+> export default {
+>   plugins: [
+>     pluginAssetsRetry({
+>       domain: ['https://cdn1.com', 'https://cdn2.com', 'https://cdn3.com'],
+>     }),
+>   ],
+>   output: {
+>     assetPrefix: 'https://cdn1.com',
+>   },
+> };
+> ```
 
 #### Resolving the domain at runtime
 
