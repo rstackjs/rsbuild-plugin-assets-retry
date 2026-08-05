@@ -106,6 +106,8 @@ const defaultAssetsRetryOptions = {
 Specifies the retry domain when assets fail to load. In the `domain` array, the first item is the default domain of static assets, and the following items are backup domains. When a asset request for a domain fails, Rsbuild will find that domain in the array and replace it with the next domain in the array.
 
 > [!NOTE]
+> The plugin uses a find-and-replace strategy on the request URL: it finds the first `domain` entry that appears in the URL and replaces the matched string with the next entry. After the last entry, it cycles back to the first one. If no entry matches, the domain is not replaced.
+>
 > `domain` entries can omit or include the protocol:
 >
 > - `domain: ['cdn1.com', 'cdn2.com', 'cdn3.com']` matches the hostname regardless of whether the request uses HTTP or HTTPS. Only the hostname is replaced, so the original protocol is preserved.
