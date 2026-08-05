@@ -123,6 +123,29 @@ defineConfig({
 
 如果 `cdn2.com` 的资源也请求失败，则会继续请求 `cdn3.com`。
 
+#### 利用字符串替换
+
+`domain` 使用字符串替换生成重试 URL，因此支持带 `https://` 开头的完整地址，也支持 CDN 地址包含子路径前缀，例如 `https://cdn2.com/foo-path`。使用完整地址时，数组中的每一项都必须带协议。此外，`output.assetPrefix` 不能使用 `//cdn1.com` 这样的协议相对地址，否则无法通过字符串替换匹配。
+
+```ts
+import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+
+export default {
+  plugins: [
+    pluginAssetsRetry({
+      domain: [
+        'https://cdn1.com',
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
+    }),
+  ],
+  output: {
+    assetPrefix: 'https://cdn1.com',
+  },
+};
+```
+
 #### 在运行时解析域名
 
 当域名列表只有在浏览器中才能确定时（例如在应用启动时注入到 `window` 上），可以传入一个函数来代替静态数组。与 `onRetry` / `onFail` 回调一样，该函数会被序列化到运行时脚本中，并在重试脚本启动时于浏览器中执行，因此可以读取构建时并不存在的值：
@@ -133,7 +156,12 @@ defineConfig({
   plugins: [
     pluginAssetsRetry({
       // 在浏览器启动时执行，而非构建时。
-      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+      domain: () => [
+        // 可以是 http://localhost:3000，也可以是 https://cdn1.com。
+        window.location.origin,
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
     }),
   ],
 });

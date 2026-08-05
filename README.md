@@ -125,6 +125,29 @@ After adding the above configuration, when assets fail to load from the `cdn1.co
 
 If the assets request for `cdn2.com` also fails, the request will fallback to `cdn3.com`.
 
+#### Using string replacement
+
+`domain` generates retry URLs using string replacement, so it supports full URLs starting with `https://` and CDN URLs with a path prefix, such as `https://cdn2.com/foo-path`. When using full URLs, every item in the array must include the protocol. In addition, `output.assetPrefix` cannot use a protocol-relative URL such as `//cdn1.com`, because it cannot be matched by the string replacement.
+
+```ts
+import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
+
+export default {
+  plugins: [
+    pluginAssetsRetry({
+      domain: [
+        'https://cdn1.com',
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
+    }),
+  ],
+  output: {
+    assetPrefix: 'https://cdn1.com',
+  },
+};
+```
+
 #### Resolving the domain at runtime
 
 When the domain list is only known in the browser (for example it is injected on `window` at application startup), pass a function instead of a static array. Like the `onRetry` / `onFail` callbacks, the function is serialized into the runtime script and evaluated in the browser when the retry script starts, so it can read values that do not exist at build time:
@@ -135,7 +158,12 @@ defineConfig({
   plugins: [
     pluginAssetsRetry({
       // Evaluated in the browser at startup, not at build time.
-      domain: () => [window.assetsCdnPath, 'https://cdn-backup.example.com'],
+      domain: () => [
+        // It can be http://localhost:3000 or https://cdn1.com.
+        window.location.origin,
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
+      ],
     }),
   ],
 });
