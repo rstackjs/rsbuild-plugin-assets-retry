@@ -166,18 +166,21 @@ defineConfig({
 });
 ```
 
-也可以将自定义变量注入到 `window` 上，并在函数中使用：
+宿主应用也可以在运行时注入 `window.myAssetPath`、`window.userRegion` 等自定义变量，再在函数中根据用户区域选择不同的备用域名：
 
 ```js
 // rsbuild.config.ts
 defineConfig({
   plugins: [
     pluginAssetsRetry({
-      domain: () => [
-        window.myAssetPath,
-        'https://cdn2.com/foo-path',
-        'https://cdn3.com',
-      ],
+      domain: () => {
+        const backupDomains =
+          window.userRegion === 'cn'
+            ? ['https://cdn2.cn/foo-path', 'https://cdn3.cn']
+            : ['https://cdn2.com/foo-path', 'https://cdn3.com'];
+
+        return [window.myAssetPath, ...backupDomains];
+      },
     }),
   ],
 });

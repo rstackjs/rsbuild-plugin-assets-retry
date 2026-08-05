@@ -168,18 +168,21 @@ defineConfig({
 });
 ```
 
-You can also inject a custom variable into `window` and use it in the function:
+The host application can also inject custom variables such as `window.myAssetPath` and `window.userRegion` at runtime. The function can then use custom logic to select different backup domains by region:
 
 ```js
 // rsbuild.config.ts
 defineConfig({
   plugins: [
     pluginAssetsRetry({
-      domain: () => [
-        window.myAssetPath,
-        'https://cdn2.com/foo-path',
-        'https://cdn3.com',
-      ],
+      domain: () => {
+        const backupDomains =
+          window.userRegion === 'cn'
+            ? ['https://cdn2.cn/foo-path', 'https://cdn3.cn']
+            : ['https://cdn2.com/foo-path', 'https://cdn3.com'];
+
+        return [window.myAssetPath, ...backupDomains];
+      },
     }),
   ],
 });
