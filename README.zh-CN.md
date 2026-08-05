@@ -152,9 +152,10 @@ defineConfig({
     pluginAssetsRetry({
       // 在浏览器启动时执行，而非构建时。
       domain: () => [
+        // 可以是 http://localhost:3000，也可以是 https://cdn1.com。
         window.location.origin,
-        'https://a.com/foo-path',
-        'https://b.com',
+        'https://cdn2.com/foo-path',
+        'https://cdn3.com',
       ],
     }),
   ],
