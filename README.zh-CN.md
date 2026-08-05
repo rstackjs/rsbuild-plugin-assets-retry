@@ -147,7 +147,7 @@ defineConfig({
 
 #### 在运行时解析域名
 
-当域名列表只有在浏览器中才能确定时（例如在应用启动时注入到 `window` 上），可以传入一个函数来代替静态数组。与 `onRetry` / `onFail` 回调一样，该函数会被序列化到运行时脚本中，并在重试脚本启动时于浏览器中执行，因此可以读取构建时并不存在的值：
+当域名列表只有在浏览器中才能确定时（例如在应用启动时注入到 `window` 上），可以传入一个函数来代替静态数组。与 `onRetry` / `onFail` 回调一样，该函数会被序列化到运行时脚本中，并在重试脚本启动时于浏览器中执行，因此可以读取构建时并不存在的值。例如，应用可以注入 `window.myAssetPath`，并在函数中添加自定义的兜底逻辑：
 
 ```js
 // rsbuild.config.ts
@@ -158,7 +158,8 @@ defineConfig({
       domain: () => [
         // 可以是 http://localhost:3000，也可以是 https://cdn1.com。
         window.location.origin,
-        'https://cdn2.com/foo-path',
+        // 使用注入的变量，并提供兜底地址。
+        window.myAssetPath || 'https://cdn2.com/foo-path',
         'https://cdn3.com',
       ],
     }),

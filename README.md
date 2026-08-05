@@ -149,7 +149,7 @@ defineConfig({
 
 #### Resolving the domain at runtime
 
-When the domain list is only known in the browser (for example it is injected on `window` at application startup), pass a function instead of a static array. Like the `onRetry` / `onFail` callbacks, the function is serialized into the runtime script and evaluated in the browser when the retry script starts, so it can read values that do not exist at build time:
+When the domain list is only known in the browser (for example it is injected on `window` at application startup), pass a function instead of a static array. Like the `onRetry` / `onFail` callbacks, the function is serialized into the runtime script and evaluated in the browser when the retry script starts, so it can read values that do not exist at build time. For example, the application can inject `window.myAssetPath`, and the function can use custom fallback logic:
 
 ```js
 // rsbuild.config.ts
@@ -160,7 +160,8 @@ defineConfig({
       domain: () => [
         // It can be http://localhost:3000 or https://cdn1.com.
         window.location.origin,
-        'https://cdn2.com/foo-path',
+        // Use an injected variable with a fallback value.
+        window.myAssetPath || 'https://cdn2.com/foo-path',
         'https://cdn3.com',
       ],
     }),
