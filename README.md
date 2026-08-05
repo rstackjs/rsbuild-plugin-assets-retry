@@ -168,7 +168,7 @@ defineConfig({
 });
 ```
 
-The host application can also inject custom variables such as `window.myAssetPath` and `window.userRegion` at runtime. The function can then use custom logic to select different backup domains by region:
+It can also work with variables injected into `window`:
 
 ```js
 // rsbuild.config.ts

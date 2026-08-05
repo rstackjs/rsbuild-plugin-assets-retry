@@ -166,7 +166,7 @@ defineConfig({
 });
 ```
 
-宿主应用也可以在运行时注入 `window.myAssetPath`、`window.userRegion` 等自定义变量，再在函数中根据用户区域选择不同的备用域名：
+配合 `window` 注入的变量完成功能：
 
 ```js
 // rsbuild.config.ts
