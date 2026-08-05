@@ -127,10 +127,9 @@ defineConfig({
 
 `domain` 使用字符串替换生成重试 URL，因此支持带 `https://` 开头的完整地址，也支持 CDN 地址包含子路径前缀，例如 `https://cdn2.com/foo-path`。使用完整地址时，数组中的每一项都必须带协议。此外，`output.assetPrefix` 不能使用 `//cdn1.com` 这样的协议相对地址，否则无法通过字符串替换匹配。
 
-```ts
-import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
-
-export default {
+```js
+// rsbuild.config.ts
+defineConfig({
   plugins: [
     pluginAssetsRetry({
       domain: [
@@ -143,7 +142,7 @@ export default {
   output: {
     assetPrefix: 'https://cdn1.com',
   },
-};
+});
 ```
 
 #### 在运行时解析域名
@@ -162,6 +161,26 @@ defineConfig({
         'https://cdn2.com/foo-path',
         'https://cdn3.com',
       ],
+    }),
+  ],
+});
+```
+
+配合 `window` 注入的变量完成功能：
+
+```js
+// rsbuild.config.ts
+defineConfig({
+  plugins: [
+    pluginAssetsRetry({
+      domain: () => {
+        const backupDomains =
+          window.userRegion === 'cn'
+            ? ['https://cdn2.cn/foo-path', 'https://cdn3.cn']
+            : ['https://cdn2.com/foo-path', 'https://cdn3.com'];
+
+        return [window.myAssetPath, ...backupDomains];
+      },
     }),
   ],
 });

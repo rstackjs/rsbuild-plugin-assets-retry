@@ -129,10 +129,9 @@ If the assets request for `cdn2.com` also fails, the request will fallback to `c
 
 `domain` generates retry URLs using string replacement, so it supports full URLs starting with `https://` and CDN URLs with a path prefix, such as `https://cdn2.com/foo-path`. When using full URLs, every item in the array must include the protocol. In addition, `output.assetPrefix` cannot use a protocol-relative URL such as `//cdn1.com`, because it cannot be matched by the string replacement.
 
-```ts
-import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
-
-export default {
+```js
+// rsbuild.config.ts
+defineConfig({
   plugins: [
     pluginAssetsRetry({
       domain: [
@@ -145,7 +144,7 @@ export default {
   output: {
     assetPrefix: 'https://cdn1.com',
   },
-};
+});
 ```
 
 #### Resolving the domain at runtime
@@ -164,6 +163,26 @@ defineConfig({
         'https://cdn2.com/foo-path',
         'https://cdn3.com',
       ],
+    }),
+  ],
+});
+```
+
+It can also work with variables injected into `window`:
+
+```js
+// rsbuild.config.ts
+defineConfig({
+  plugins: [
+    pluginAssetsRetry({
+      domain: () => {
+        const backupDomains =
+          window.userRegion === 'cn'
+            ? ['https://cdn2.cn/foo-path', 'https://cdn3.cn']
+            : ['https://cdn2.com/foo-path', 'https://cdn3.com'];
+
+        return [window.myAssetPath, ...backupDomains];
+      },
     }),
   ],
 });
