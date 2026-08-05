@@ -125,7 +125,7 @@ defineConfig({
 
 #### 利用字符串替换
 
-`domain` 使用字符串替换生成重试 URL，因此支持带 `https://` 开头的完整地址，也支持 CDN 地址包含子路径前缀，例如 `https://cdn2.com/foo-path`。使用完整地址时，数组中的每一项都必须带协议。
+`domain` 使用字符串替换生成重试 URL，因此支持带 `https://` 开头的完整地址，也支持 CDN 地址包含子路径前缀，例如 `https://cdn2.com/foo-path`。使用完整地址时，数组中的每一项都必须带协议。此外，`output.assetPrefix` 不能使用 `//cdn1.com` 这样的协议相对地址，否则无法通过字符串替换匹配。
 
 ```ts
 import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';

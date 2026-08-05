@@ -127,7 +127,7 @@ If the assets request for `cdn2.com` also fails, the request will fallback to `c
 
 #### Using string replacement
 
-`domain` generates retry URLs using string replacement, so it supports full URLs starting with `https://` and CDN URLs with a path prefix, such as `https://cdn2.com/foo-path`. When using full URLs, every item in the array must include the protocol.
+`domain` generates retry URLs using string replacement, so it supports full URLs starting with `https://` and CDN URLs with a path prefix, such as `https://cdn2.com/foo-path`. When using full URLs, every item in the array must include the protocol. In addition, `output.assetPrefix` cannot use a protocol-relative URL such as `//cdn1.com`, because it cannot be matched by the string replacement.
 
 ```ts
 import { pluginAssetsRetry } from '@rsbuild/plugin-assets-retry';
