@@ -17,4 +17,11 @@ export default defineConfig([
       'prefer-rest-params': 'off',
     },
   },
+  {
+    files: ['test/**/*'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-undef': 'off',
+    },
+  },
 ]);
