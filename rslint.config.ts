@@ -9,12 +9,19 @@ export default defineConfig([
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      'no-undef': 'off',
     },
   },
   {
     files: ['src/runtime/asyncChunkRetry.ts'],
     rules: {
       'prefer-rest-params': 'off',
+    },
+  },
+  {
+    files: ['test/**/*'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
 ]);
