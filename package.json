@@ -35,26 +35,26 @@
     "pre-commit": "pnpm run lint:write"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.58.9",
-    "@rsbuild/core": "^2.1.5",
+    "@microsoft/api-extractor": "^7.59.0",
+    "@rsbuild/core": "^2.2.1",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rslib/core": "^0.23.2",
-    "@rslint/core": "^0.8.2",
+    "@rslint/core": "^0.9.0",
     "@rstackjs/test-utils": "^0.2.0",
-    "@rstest/core": "^0.11.1",
-    "@rstest/playwright": "^0.11.1",
-    "@swc/core": "^1.15.43",
+    "@rstest/core": "^0.11.11",
+    "@rstest/playwright": "^0.11.11",
+    "@swc/core": "^1.16.1",
     "@types/node": "^24.13.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
     "@types/serialize-javascript": "^5.0.4",
-    "playwright": "^1.61.1",
-    "prettier": "^3.9.5",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "playwright": "^1.62.1",
+    "prettier": "^3.9.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "rsbuild-plugin-publint": "^1.0.0",
-    "serialize-javascript": "^7.0.7",
-    "simple-git-hooks": "^2.13.1",
+    "serialize-javascript": "^7.1.1",
+    "simple-git-hooks": "^2.14.0",
     "typescript": "7.0.2"
   },
   "peerDependencies": {
@@ -65,7 +65,7 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@11.13.0",
+  "packageManager": "pnpm@11.24.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
