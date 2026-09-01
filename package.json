@@ -2,13 +2,13 @@
   "name": "@rsbuild/plugin-assets-retry",
   "version": "2.0.2",
   "description": "An Rsbuild plugin to automatically resend requests when static assets fail to load.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rstackjs/rsbuild-plugin-assets-retry.git"
-  },
   "homepage": "https://github.com/rstackjs/rsbuild-plugin-assets-retry#readme",
   "bugs": {
     "url": "https://github.com/rstackjs/rsbuild-plugin-assets-retry/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rstackjs/rsbuild-plugin-assets-retry.git"
   },
   "license": "MIT",
   "type": "module",
@@ -23,25 +23,21 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib",
-    "dev": "rslib -w",
-    "lint": "rslint && prettier -c .",
-    "lint:write": "rslint --fix && prettier -w .",
-    "prepare": "simple-git-hooks",
-    "test": "rstest",
-    "bump": "pnpx bumpp"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm run lint:write"
+    "build": "rs lib",
+    "bump": "pnpx bumpp",
+    "check": "rs check",
+    "dev": "rs lib -w",
+    "format": "rs fmt",
+    "lint": "rs lint",
+    "lint:write": "rs lint --fix && rs fmt",
+    "prepare": "rs hooks",
+    "test": "rs test"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.59.0",
     "@rsbuild/core": "^2.2.1",
     "@rsbuild/plugin-react": "^2.1.0",
-    "@rslib/core": "^0.23.2",
-    "@rslint/core": "^0.9.0",
     "@rstackjs/test-utils": "^0.2.0",
-    "@rstest/core": "^0.11.11",
     "@rstest/playwright": "^0.11.11",
     "@swc/core": "^1.16.1",
     "@types/node": "^24.13.3",
@@ -49,12 +45,11 @@
     "@types/react-dom": "^19.2.5",
     "@types/serialize-javascript": "^5.0.4",
     "playwright": "^1.62.1",
-    "prettier": "^3.9.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "rsbuild-plugin-publint": "^1.0.0",
+    "rstack": "^0.7.1",
     "serialize-javascript": "^7.1.1",
-    "simple-git-hooks": "^2.14.0",
     "typescript": "7.0.2"
   },
   "peerDependencies": {

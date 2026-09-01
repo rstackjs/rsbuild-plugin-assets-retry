@@ -1,0 +1,38 @@
+name: Lint
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on pull request events but only for the main branch
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24.19.0
+          package-manager-cache: false
+
+      - name: Install Pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          run_install: true
+
+      - name: Run Check
+        run: pnpm run check

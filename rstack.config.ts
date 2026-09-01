@@ -1,10 +1,11 @@
+// Configuration guide: https://rstack.rs/config
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
-import { type RsbuildPlugin, logger } from '@rsbuild/core';
-import { defineConfig } from '@rslib/core';
 import { minify } from '@swc/core';
+import { define } from 'rstack';
+import { type RsbuildPlugin, logger } from 'rstack/app';
 import { pluginPublint } from 'rsbuild-plugin-publint';
-import pkgJson from './package.json';
+import pkgJson from './package.json' with { type: 'json' };
 
 /**
  * Compile runtime code to ES5
@@ -61,7 +62,7 @@ const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
   },
 });
 
-export default defineConfig({
+define.lib({
   plugins: [pluginPublint()],
   lib: [
     {
@@ -108,3 +109,47 @@ export default defineConfig({
     },
   },
 });
+
+define.test({
+  env: {
+    // Let Rsbuild choose the mode based on the command.
+    NODE_ENV: undefined,
+  },
+  isolate: false,
+});
+
+define.fmt({
+  ignorePatterns: ['.rslib/**', 'dist/**'],
+  singleQuote: true,
+  sortPackageJson: true,
+});
+
+define.staged({
+  '*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}': ['rs lint --fix', 'rs fmt'],
+  '*.{json,md,mdx,css,scss,less,html,yml,yaml}': 'rs fmt',
+});
+
+define.lint(({ js, ts }) => [
+  {
+    ignores: ['src/runtime/runtime.d.ts'],
+  },
+  js.configs.recommended,
+  ts.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    files: ['src/runtime/asyncChunkRetry.ts'],
+    rules: {
+      'prefer-rest-params': 'off',
+    },
+  },
+  {
+    files: ['test/**/*'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+]);
