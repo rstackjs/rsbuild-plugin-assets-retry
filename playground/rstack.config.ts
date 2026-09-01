@@ -2,10 +2,8 @@
 import { define } from 'rstack';
 
 define.app(async () => {
-  const [{ pluginReact }, { pluginAssetsRetry }] = await Promise.all([
-    import('@rsbuild/plugin-react'),
-    import('../dist/index.js'),
-  ]);
+  const { pluginReact } = await import('@rsbuild/plugin-react');
+  const { pluginAssetsRetry } = await import('../dist/index.js');
 
   function createBlockMiddleware({ urlPrefix, blockNum, onBlock }) {
     let counter = 0;

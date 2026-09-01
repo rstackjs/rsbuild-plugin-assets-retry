@@ -1,113 +1,119 @@
 // Configuration guide: https://rstack.rs/config
-import path from 'node:path';
-import { performance } from 'node:perf_hooks';
-import { minify } from '@swc/core';
 import { define } from 'rstack';
-import { type RsbuildPlugin, logger } from 'rstack/app';
-import { pluginPublint } from 'rsbuild-plugin-publint';
-import pkgJson from './package.json' with { type: 'json' };
+import type { RsbuildPlugin } from 'rstack/app';
 
-/**
- * Compile runtime code to ES5
- */
-const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
-  filename: string,
-) => ({
-  name: 'rsbuild-plugin-compile-runtime',
-  setup(api) {
-    /**
-     * transform `src/runtime/${filename}.ts`
-     * to `dist/runtime/${filename}.js` and `dist/runtime/${filename}.min.js`
-     */
-    async function minifyRuntimeFile(distCode: string) {
-      const startTime = performance.now();
-      const { code: minifiedRuntimeCode } = await minify(distCode, {
-        ecma: 6,
-        // allows SWC to mangle function names
-        module: true,
-        compress: {
-          passes: 5,
-          unsafe: true,
+define.lib(async () => {
+  const path = await import('node:path');
+  const { performance } = await import('node:perf_hooks');
+  const { minify } = await import('@swc/core');
+  const { logger } = await import('rstack/app');
+  const { pluginPublint } = await import('rsbuild-plugin-publint');
+  const { default: pkgJson } = await import('./package.json', {
+    with: { type: 'json' },
+  });
+
+  /**
+   * Compile runtime code to ES5
+   */
+  const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
+    filename: string,
+  ) => ({
+    name: 'rsbuild-plugin-compile-runtime',
+    setup(api) {
+      /**
+       * transform `src/runtime/${filename}.ts`
+       * to `dist/runtime/${filename}.js` and `dist/runtime/${filename}.min.js`
+       */
+      async function minifyRuntimeFile(distCode: string) {
+        const startTime = performance.now();
+        const { code: minifiedRuntimeCode } = await minify(distCode, {
+          ecma: 6,
+          // allows SWC to mangle function names
+          module: true,
+          compress: {
+            passes: 5,
+            unsafe: true,
+          },
+        });
+
+        logger.success(
+          `minify ${filename} retry runtime code in ${(
+            performance.now() - startTime
+          ).toFixed(1)} ms`,
+        );
+        return minifiedRuntimeCode;
+      }
+
+      api.processAssets(
+        { stage: 'optimize-transfer' },
+        async ({ assets, compilation, compiler }) => {
+          const minifiedChunkFilePath = path.join(
+            'runtime',
+            `${filename}.min.js`,
+          );
+
+          await Promise.all(
+            Object.entries(assets).map(async ([_, assetSource]) => {
+              const code = assetSource.source().toString();
+              const minifiedCode = await minifyRuntimeFile(code);
+              compilation.emitAsset(
+                minifiedChunkFilePath,
+                new compiler.webpack.sources.RawSource(minifiedCode),
+              );
+            }),
+          );
         },
-      });
-
-      logger.success(
-        `minify ${filename} retry runtime code in ${(
-          performance.now() - startTime
-        ).toFixed(1)} ms`,
       );
-      return minifiedRuntimeCode;
-    }
+    },
+  });
 
-    api.processAssets(
-      { stage: 'optimize-transfer' },
-      async ({ assets, compilation, compiler }) => {
-        const minifiedChunkFilePath = path.join(
-          'runtime',
-          `${filename}.min.js`,
-        );
-
-        await Promise.all(
-          Object.entries(assets).map(async ([_, assetSource]) => {
-            const code = assetSource.source().toString();
-            const minifiedCode = await minifyRuntimeFile(code);
-            compilation.emitAsset(
-              minifiedChunkFilePath,
-              new compiler.webpack.sources.RawSource(minifiedCode),
-            );
-          }),
-        );
-      },
-    );
-  },
-});
-
-define.lib({
-  plugins: [pluginPublint()],
-  lib: [
-    {
-      syntax: 'es2023',
-      dts: {
-        bundle: true,
-      },
-      source: {
-        entry: {
-          index: 'src/index.ts',
+  return {
+    plugins: [pluginPublint()],
+    lib: [
+      {
+        syntax: 'es2023',
+        dts: {
+          bundle: true,
+        },
+        source: {
+          entry: {
+            index: 'src/index.ts',
+          },
         },
       },
-    },
-    {
-      format: 'iife',
-      syntax: 'es6',
-      source: {
-        entry: {
-          'runtime/initialChunkRetry': 'src/runtime/initialChunkRetry.ts',
+      {
+        format: 'iife',
+        syntax: 'es6',
+        source: {
+          entry: {
+            'runtime/initialChunkRetry': 'src/runtime/initialChunkRetry.ts',
+          },
         },
-      },
-      output: {
-        target: 'web',
-      },
-      plugins: [pluginGenerateMinified('initialChunkRetry')],
-    },
-    {
-      format: 'iife',
-      syntax: 'es6',
-      source: {
-        entry: {
-          'runtime/asyncChunkRetry': 'src/runtime/asyncChunkRetry.ts',
+        output: {
+          target: 'web',
         },
+        plugins: [pluginGenerateMinified('initialChunkRetry')],
       },
-      output: {
-        target: 'web',
+      {
+        format: 'iife',
+        syntax: 'es6',
+        source: {
+          entry: {
+            'runtime/asyncChunkRetry': 'src/runtime/asyncChunkRetry.ts',
+          },
+        },
+        output: {
+          target: 'web',
+        },
+        plugins: [pluginGenerateMinified('asyncChunkRetry')],
       },
-      plugins: [pluginGenerateMinified('asyncChunkRetry')],
+    ],
+    source: {
+      define: {
+        PLUGIN_VERSION: JSON.stringify(pkgJson.version.replace(/\./g, '-')),
+      },
     },
-  ],
-  source: {
-    define: {
-      PLUGIN_VERSION: JSON.stringify(pkgJson.version.replace(/\./g, '-')),
-    },
-  },
+  };
 });
 
 define.test({
