@@ -1,71 +1,11 @@
 // Configuration guide: https://rstack.rs/config
 import { define } from 'rstack';
-import type { RsbuildPlugin } from 'rstack/app';
+import pkgJson from './package.json' with { type: 'json' };
 
 define.lib(async () => {
-  const path = await import('node:path');
-  const { performance } = await import('node:perf_hooks');
-  const { minify } = await import('@swc/core');
-  const { logger } = await import('rstack/app');
+  const { pluginGenerateMinified } =
+    await import('./config/pluginGenerateMinified.ts');
   const { pluginPublint } = await import('rsbuild-plugin-publint');
-  const { default: pkgJson } = await import('./package.json', {
-    with: { type: 'json' },
-  });
-
-  /**
-   * Compile runtime code to ES5
-   */
-  const pluginGenerateMinified: (filename: string) => RsbuildPlugin = (
-    filename: string,
-  ) => ({
-    name: 'rsbuild-plugin-compile-runtime',
-    setup(api) {
-      /**
-       * transform `src/runtime/${filename}.ts`
-       * to `dist/runtime/${filename}.js` and `dist/runtime/${filename}.min.js`
-       */
-      async function minifyRuntimeFile(distCode: string) {
-        const startTime = performance.now();
-        const { code: minifiedRuntimeCode } = await minify(distCode, {
-          ecma: 6,
-          // allows SWC to mangle function names
-          module: true,
-          compress: {
-            passes: 5,
-            unsafe: true,
-          },
-        });
-
-        logger.success(
-          `minify ${filename} retry runtime code in ${(
-            performance.now() - startTime
-          ).toFixed(1)} ms`,
-        );
-        return minifiedRuntimeCode;
-      }
-
-      api.processAssets(
-        { stage: 'optimize-transfer' },
-        async ({ assets, compilation, compiler }) => {
-          const minifiedChunkFilePath = path.join(
-            'runtime',
-            `${filename}.min.js`,
-          );
-
-          await Promise.all(
-            Object.entries(assets).map(async ([_, assetSource]) => {
-              const code = assetSource.source().toString();
-              const minifiedCode = await minifyRuntimeFile(code);
-              compilation.emitAsset(
-                minifiedChunkFilePath,
-                new compiler.webpack.sources.RawSource(minifiedCode),
-              );
-            }),
-          );
-        },
-      );
-    },
-  });
 
   return {
     plugins: [pluginPublint()],
