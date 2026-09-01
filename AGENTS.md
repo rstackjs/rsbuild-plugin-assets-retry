@@ -9,10 +9,11 @@
 
 ## Tooling
 
-- Build with Rslib: `pnpm build`.
-- Lint with Rslint and Prettier: `pnpm lint`; apply fixes with `pnpm lint:write`.
-- Run tests with Playwright: `pnpm test`.
-- Use Node.js `^20.19.0 || >=22.12.0` and pnpm 11.
+- Use Rstack CLI for the repository toolchain.
+- Build with `pnpm build` (`rs lib`).
+- Run lint and formatting checks with `pnpm check`; apply formatting with `pnpm format` and lint fixes with `pnpm lint --fix`.
+- Run tests with Playwright through `pnpm test` (`rs test`).
+- Use Node.js `^22.18.0 || >=24.3.0` and pnpm 11.
 
 ## Package Contract
 
@@ -27,7 +28,7 @@ Before opening a PR, run:
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm lint
+pnpm check
 pnpm build
 pnpm test
 npm pack --dry-run
