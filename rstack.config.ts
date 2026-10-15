@@ -1,5 +1,6 @@
 // Configuration guide: https://rstack.rs/config
 import { define } from 'rstack';
+import { definePlaywrightConfig } from '@rstest/playwright/config';
 import pkgJson from './package.json' with { type: 'json' };
 
 define.lib(async () => {
@@ -57,6 +58,7 @@ define.lib(async () => {
 });
 
 define.test({
+  extends: definePlaywrightConfig({}),
   env: {
     // Let Rsbuild choose the mode based on the command.
     NODE_ENV: undefined,
