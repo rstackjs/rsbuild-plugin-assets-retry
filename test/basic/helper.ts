@@ -111,11 +111,15 @@ export async function createRsbuildWithMiddleware(
   entry?: string,
   port?: number,
   assetPrefix?: string,
+  runtimeMode?: 'webpack' | 'rspack',
 ) {
   const rsbuild = await createRsbuild({
     cwd: import.meta.dirname,
     rsbuildConfig: {
       plugins: [pluginReact(), pluginAssetsRetry(options)],
+      tools: runtimeMode
+        ? { rspack: { experiments: { runtimeMode } } }
+        : undefined,
       dev: {
         hmr: false,
         liveReload: false,

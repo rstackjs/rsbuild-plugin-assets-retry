@@ -31,7 +31,7 @@ type LoadScript = (
   chunkId: ChunkId,
   ...args: unknown[]
 ) => string;
-type LoadStyleSheet = (href: string, chunkId: ChunkId) => string;
+type LoadStyleSheet = (url: ChunkSrcUrl, chunkId: ChunkId) => ChunkSrcUrl;
 
 declare global {
   // RuntimeGlobals.require
@@ -323,11 +323,8 @@ function loadScript(): string {
   return originalLoadScript(...args);
 }
 
-function loadStyleSheet(href: string, chunkId: ChunkId): string {
-  const retry = globalCurrRetryingCss[chunkId];
-  return (
-    (retry && retry.nextRetryUrl) || __RUNTIME_GLOBALS_PUBLIC_PATH__ + href
-  );
+function loadStyleSheet(url: ChunkSrcUrl, chunkId: ChunkId): ChunkSrcUrl {
+  return globalCurrRetryingCss[chunkId]?.nextRetryUrl || url;
 }
 
 function registerAsyncChunkRetry() {
