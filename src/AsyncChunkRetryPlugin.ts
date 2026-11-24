@@ -110,14 +110,14 @@ class AsyncChunkRetryPlugin implements Rspack.RspackPluginInstance {
         const isCssLoadingRuntimeModule =
           constructorName === 'CssLoadingRuntimeModule';
 
-        // https://github.com/web-infra-dev/rspack/blob/734ba4cfbec00ab68ff55bac95e7740fe8228229/crates/rspack_plugin_extract_css/src/runtime/css_load.js#L54
         if (isCssLoadingRuntimeModule) {
+          // Reuse the URL computed by the CSS runtime in both runtime modes.
           modifyRuntimeModule(
             module,
             (originSource) =>
               originSource.replace(
-                'var fullhref = __webpack_require__.p + href;',
-                'var fullhref = __webpack_require__.rbLoadStyleSheet ? __webpack_require__.rbLoadStyleSheet(href, chunkId) : (__webpack_require__.p + href);',
+                /^([ \t]*)(var fullhref = [^\r\n]+;)$/m,
+                '$1$2\n$1if (__webpack_require__.rbLoadStyleSheet) fullhref = __webpack_require__.rbLoadStyleSheet(fullhref, chunkId);',
               ),
             isRspack,
           );
